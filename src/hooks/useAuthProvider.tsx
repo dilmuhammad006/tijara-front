@@ -15,23 +15,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const login = useCallback(
     async (email: string, password: string): Promise<boolean> => {
       try {
-        const res = await customAxios.post("/auth/login", {
+        await customAxios.post("/auth/login", {
           email,
           password,
         });
 
-        const accessToken = res.data?.data?.token?.accesToken;
-        const refreshToken = res.data?.data?.token?.refreshToken;
+        // const accessToken = res.data?.data?.token?.accesToken;
+        // const refreshToken = res.data?.data?.token?.refreshToken;
 
-        if (accessToken && refreshToken) {
-          Cookies.set("accessToken", accessToken, { expires: 1 });
-          Cookies.set("refreshToken", refreshToken, { expires: 7 });
-          await refetch();
-          navigate("/");
-          toast.success("Login successfully");
+        // if (accessToken && refreshToken) {
+        //   Cookies.set("accessToken", accessToken, { expires: 1 });
+        //   Cookies.set("refreshToken", refreshToken, { expires: 7 });
+        //   await refetch();
+        //   toast.success("Login successfully");
 
-          return true;
-        }
+        //   return true;
+        // }
+        navigate("/");
         toast.success("Login successfully");
         return false;
       } catch (err) {

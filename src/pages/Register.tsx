@@ -94,7 +94,7 @@ const RegisterPage = () => {
                     id="name"
                     type="text"
                     placeholder="John Doe"
-                    className="pl-10 h-11 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                    className="pl-10 h-11 border-gray-300 focus:border-slate-600 focus:ring-slate-600"
                     {...register("name", {
                       required: "Name is required",
                       minLength: {
@@ -123,7 +123,7 @@ const RegisterPage = () => {
                     id="email"
                     type="email"
                     placeholder="example@email.com"
-                    className="pl-10 h-11 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                    className="pl-10 h-11 border-gray-300 focus:border-slate-600 focus:ring-slate-600"
                     {...register("email", {
                       required: "Email is required",
                       pattern: {
@@ -152,7 +152,7 @@ const RegisterPage = () => {
                     id="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="••••••••"
-                    className="pl-10 pr-10 h-11 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                    className="pl-10 pr-10 h-11 border-gray-300 focus:border-slate-600 focus:ring-slate-600"
                     {...register("password", {
                       required: "Password is required",
                       minLength: {
@@ -194,7 +194,7 @@ const RegisterPage = () => {
                     id="confirmPassword"
                     type={showConfirmPassword ? "text" : "password"}
                     placeholder="••••••••"
-                    className="pl-10 pr-10 h-11 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                    className="pl-10 pr-10 h-11 border-gray-300 focus:border-slate-600 focus:ring-slate-600"
                     {...register("confirmPassword", {
                       required: "Please confirm your password",
                       validate: (value) =>
@@ -224,7 +224,7 @@ const RegisterPage = () => {
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="w-full h-11 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium shadow-lg hover:shadow-xl transition-all duration-200"
+                className="w-full h-11 bg-slate-600 text-white font-medium shadow-lg hover:shadow-xl transition-all duration-200"
               >
                 {isLoading ? (
                   <div className="flex items-center gap-2">
@@ -253,7 +253,7 @@ const RegisterPage = () => {
                   <NavLink
                     to="/auth/login"
                     replace
-                    className="text-blue-600 hover:text-blue-700 font-medium transition-colors"
+                    className="text-slate-600 hover:text-blue-700 font-medium transition-colors"
                   >
                     Sign in
                   </NavLink>

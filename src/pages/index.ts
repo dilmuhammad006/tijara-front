@@ -2,3 +2,8 @@ export { default as LoginPage } from "./Login";
 export { default as HomePage } from "./Home";
 export { default as NotFoundPage } from "./404";
 export { default as RegisterPage } from "./Register";
+export { default as ProfilePage } from "./Profile";
+export { default as LastSeenAnnouncements } from "./LastSeenAnnouncements";
+export { default as LikedAnnouncements } from "./LikedAnnouncements";
+export { default as MyAnnouncments } from "./MyAnnouncements";
+export { default as New } from "./New";

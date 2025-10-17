@@ -39,11 +39,15 @@ export const useDeleteQuery = (mutationKey: string[]) => {
   return useMutation({
     mutationKey,
     mutationFn: async (props: MutationProps) => {
-      const { data } = await customAxios.delete(props.url, props.payload);
+      const { data } = await customAxios.delete(props.url, {
+        data: props.payload,
+        ...props.config,
+      });
       return data;
     },
   });
 };
+
 export const usePatchQuery = (mutationKey: string[]) => {
   return useMutation({
     mutationKey,
