@@ -1,5 +1,4 @@
 import React, { useMemo, useCallback } from "react";
-import Cookies from "js-cookie";
 import { useAuthMe } from "./auth/me";
 import customAxios from "@/services/axios";
 import { AuthContext } from "./useAuthContext";
@@ -43,10 +42,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     [refetch]
   );
 
-  const logout = useCallback(() => {
-    Cookies.remove("accessToken");
-    Cookies.remove("refreshToken");
-    window.location.href = "/auth/login";
+  const logout = useCallback(async () => {
+    try {
+      await customAxios.get("auth/logout");
+      window.location.href = "/auth/login";
+      toast.success("Successfully logged out");
+    } catch (error) {
+      toast.error("Something went wrong");
+    }
   }, []);
 
   const value = useMemo(
