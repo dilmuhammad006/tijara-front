@@ -47,6 +47,7 @@ const ProfilePage = () => {
   const { mutate, isPending } = usePatchQuery(["update-profile"]);
 
   const [isLoading, setIsLoading] = useState(false);
+  const [isEditing, setIsEditing] = useState(isPending);
 
   const onSubmit = async (data: ProfileProps) => {
     setIsLoading(true);
@@ -58,6 +59,7 @@ const ProfilePage = () => {
         },
         {
           onSuccess: () => {
+            setIsEditing(false)
             refetch();
             toast.success("Profile updated");
           },
@@ -162,11 +164,12 @@ const ProfilePage = () => {
                     Update your account details
                   </CardDescription>
                 </div>
-                {!isPending ? (
+                {!isEditing ? (
                   <Button
                     variant="outline"
                     size="sm"
                     className="flex items-center gap-2 text-slate-600"
+                    onClick={() => setIsEditing(true)}
                   >
                     <Edit2 className="w-4 h-4" />
                     Edit
@@ -211,7 +214,7 @@ const ProfilePage = () => {
                     <Input
                       id="name"
                       type="text"
-                      disabled={!isPending}
+                      disabled={!isEditing}
                       className="pl-10 disabled:bg-slate-50 disabled:text-slate-500"
                       {...register("name", { required: "Name is required" })}
                     />
@@ -236,7 +239,7 @@ const ProfilePage = () => {
                     <Input
                       id="email"
                       type="email"
-                      disabled={!isPending}
+                      disabled={!isEditing}
                       className="pl-10 disabled:bg-slate-50 disabled:text-slate-500"
                       {...register("email", {
                         required: "Email is required",
@@ -279,7 +282,7 @@ const ProfilePage = () => {
                 </div>
 
                 {/* Save Button */}
-                {isPending && (
+                {isEditing && (
                   <Button
                     onClick={handleSubmit(onSubmit)}
                     disabled={isLoading}

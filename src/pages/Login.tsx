@@ -138,12 +138,12 @@ const LoginPage = () => {
 
               {/* Parolni unutdingizmi */}
               <div className="flex items-center justify-end">
-                <a
-                  href="#"
+                <NavLink
+                  to="/forgot/password"
                   className="text-sm text-slate-600 font-medium transition-colors"
                 >
                   Forgot password?
-                </a>
+                </NavLink>
               </div>
 
               {/* Submit Button */}

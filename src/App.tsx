@@ -1,16 +1,17 @@
 import { Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./hooks/useAuthProvider";
 import {
+  ForgotPasswordPage,
   HomePage,
   LastSeenAnnouncements,
   LikedAnnouncements,
   LoginPage,
   New,
   NotFoundPage,
+  ProfilePage,
   RegisterPage,
 } from "./pages";
 import MainLayout from "./layout/Main";
-import Profile from "./pages/Profile";
 import MyAnnouncements from "./pages/MyAnnouncements";
 
 function App() {
@@ -29,7 +30,7 @@ function App() {
           path="/profile"
           element={
             <MainLayout>
-              <Profile />
+              <ProfilePage />
             </MainLayout>
           }
         />
@@ -67,6 +68,7 @@ function App() {
         />
         <Route path="/auth/login" element={<LoginPage />} />
         <Route path="/auth/register" element={<RegisterPage />} />
+        <Route path="/forgot/password" element={<ForgotPasswordPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </AuthProvider>

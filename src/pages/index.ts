@@ -7,3 +7,4 @@ export { default as LastSeenAnnouncements } from "./LastSeenAnnouncements";
 export { default as LikedAnnouncements } from "./LikedAnnouncements";
 export { default as MyAnnouncments } from "./MyAnnouncements";
 export { default as New } from "./New";
+export { default as ForgotPasswordPage } from "./ForgotPassword";

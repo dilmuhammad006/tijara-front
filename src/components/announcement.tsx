@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Announcement } from "@/types/api/announcement";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Heart, Phone, TrashIcon } from "lucide-react";
+import { Edit, Heart, Phone, TrashIcon } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useDeleteQuery, usePostQuery } from "@/hooks";
 import toast from "react-hot-toast";
@@ -130,15 +130,23 @@ const AnnouncementCard = ({
           </div>
 
           <div className="mt-4 flex gap-2">
-            <a
-              href={`mailto:${announcement.user?.email}`}
-              onClick={(e) => e.stopPropagation()}
-            >
+            {isMy ? (
               <button className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-slate-600 text-white rounded-lg hover:bg-slate-700 transition-colors">
-                <Phone className="w-5 h-5" />
-                Contact
+                <Edit className="w-5 h-5" />
+                edit
               </button>
-            </a>
+            ) : (
+              <a
+                href={`mailto:${announcement.user?.email}`}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-slate-600 text-white rounded-lg hover:bg-slate-700 transition-colors">
+                  <Phone className="w-5 h-5" />
+                  Contact
+                </button>
+              </a>
+            )}
+
             <button
               onClick={(e) => {
                 e.stopPropagation();
