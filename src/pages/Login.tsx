@@ -13,6 +13,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { useForm } from "react-hook-form";
 import { Eye, EyeOff, Mail, Lock } from "lucide-react";
 import { NavLink } from "react-router";
+import toast from "react-hot-toast";
+import googleIcon from "../assets/google-logo-icon-gsuite-hd-701751694791470gzbayltphh.png";
 
 const LoginPage = () => {
   interface LoginProps {
@@ -28,6 +30,7 @@ const LoginPage = () => {
   } = useForm<LoginProps>();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const baseURL = import.meta.env.VITE_PUBLIC_BASE_URL;
 
   const onSubmit = async (data: LoginProps) => {
     setIsLoading(true);
@@ -35,6 +38,14 @@ const LoginPage = () => {
       await login(data.email, data.password);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleGoogle = () => {
+    try {
+      window.location.href = `${baseURL}/auth/google`;
+    } catch (error) {
+      toast.error("Something went wrong");
     }
   };
 
@@ -160,6 +171,19 @@ const LoginPage = () => {
                   <span className="px-4 bg-white text-gray-500">or</span>
                 </div>
               </div>
+              <Card
+                onClick={handleGoogle}
+                className="hover:border-slate-400 transition-colors cursor-pointer"
+              >
+                <CardContent className="flex items-center justify-around p-2 px-6">
+                  <p className="text-slate-700 text-sm">Continue with Google</p>
+                  <img
+                    src={googleIcon}
+                    alt="google icon"
+                    className="w-8 h-8 rounded-full"
+                  />
+                </CardContent>
+              </Card>
 
               {/* Ro'yxatdan o'tish */}
               <div className="text-center">

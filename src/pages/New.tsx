@@ -24,7 +24,7 @@ import {
 import { useGetAllCategories } from "@/hooks/announcements";
 import { usePostQuery } from "@/hooks";
 import toast from "react-hot-toast";
-import { QueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
 
 const CreateAnnouncementPage = () => {
@@ -34,7 +34,6 @@ const CreateAnnouncementPage = () => {
     price: number;
     location: string;
     categoryId: number;
-    images: string[];
   }
 
   const {
@@ -44,23 +43,29 @@ const CreateAnnouncementPage = () => {
     formState: { errors },
     reset,
   } = useForm<AnnouncementProps>();
-  const [images, setImages] = useState<string[]>([]);
+  const [images, setImages] = useState<File[]>([]); // File[] ga o'zgardi
   const [imagePreview, setImagePreview] = useState<string[]>([]);
   const { data: categories } = useGetAllCategories();
   const { mutate, isPending } = usePostQuery(["create-announcement"]);
-  const queryClient = new QueryClient();
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   const onSubmit = async (data: AnnouncementProps) => {
-    const announcementData = {
-      ...data,
-      images: images,
-    };
+    const formData = new FormData();
+    formData.append("name", data.name);
+    formData.append("description", data.description);
+    formData.append("price", data.price.toString());
+    formData.append("location", data.location);
+    formData.append("categoryId", data.categoryId.toString());
+
+    images.forEach((image) => {
+      formData.append("images", image);
+    });
 
     mutate(
       {
         url: "announcement",
-        payload: announcementData,
+        payload: formData,
         config: {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -70,15 +75,17 @@ const CreateAnnouncementPage = () => {
       {
         onSuccess: () => {
           reset();
-          toast.success("Success");
+          setImages([]);
+          setImagePreview([]);
+          toast.success("Announcement created successfully!");
           queryClient.invalidateQueries({
             queryKey: ["get-all-announcements"],
           });
           queryClient.invalidateQueries({ queryKey: ["my-announcement"] });
           navigate("/my/announcements");
         },
-        onError: (error) => {
-          toast.error(error.message);
+        onError: (error: any) => {
+          toast.error(error.message || "Something went wrong");
         },
       }
     );
@@ -87,17 +94,14 @@ const CreateAnnouncementPage = () => {
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files) {
-      const newImages: string[] = [];
-      const newPreviews: string[] = [];
+      const newFiles = Array.from(files);
 
-      Array.from(files).forEach((file) => {
+      setImages((prev) => [...prev, ...newFiles]);
+
+      newFiles.forEach((file) => {
         const reader = new FileReader();
         reader.onloadend = () => {
-          const result = reader.result as string;
-          newImages.push(result);
-          newPreviews.push(result);
-          setImages((prev) => [...prev, result]);
-          setImagePreview((prev) => [...prev, result]);
+          setImagePreview((prev) => [...prev, reader.result as string]);
         };
         reader.readAsDataURL(file);
       });
@@ -108,6 +112,7 @@ const CreateAnnouncementPage = () => {
     setImages((prev) => prev.filter((_, i) => i !== index));
     setImagePreview((prev) => prev.filter((_, i) => i !== index));
   };
+
   const location = [
     { name: "Tashkent" },
     { name: "Samarkand" },
@@ -203,7 +208,7 @@ const CreateAnnouncementPage = () => {
                   <textarea
                     id="description"
                     placeholder="Describe your product in detail..."
-                    className="pl-10 min-h-32 resize-none"
+                    className="w-full pl-10 p-3 border border-slate-300 rounded-lg min-h-32 resize-none focus:outline-none focus:ring-2 focus:ring-slate-500 focus:border-transparent"
                     {...register("description", {
                       required: "Description is required",
                       minLength: {
@@ -302,18 +307,18 @@ const CreateAnnouncementPage = () => {
                         <SelectValue placeholder="Select location" />
                       </SelectTrigger>
                       <SelectContent>
-                        {location?.map((location) => (
-                          <SelectItem key={location.name} value={location.name}>
-                            {location.name}
+                        {location?.map((loc) => (
+                          <SelectItem key={loc.name} value={loc.name}>
+                            {loc.name}
                           </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
                   )}
                 />
-                {errors.categoryId && (
+                {errors.location && (
                   <p className="text-sm text-red-600">
-                    {errors.categoryId.message}
+                    {errors.location.message}
                   </p>
                 )}
               </div>

@@ -9,9 +9,8 @@ const MainLayout = ({ children }: ChildrenProps) => {
   // const { user } = useAuth();
 
   // useEffect(() => {
-  //   console.log(user);
   //   if (!user) {
-  //     navigate("auth/login");
+  //     navigate("/auth/login");
   //   }
   // }, [user]);
 

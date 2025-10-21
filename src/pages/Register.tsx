@@ -13,7 +13,7 @@ import { useForm } from "react-hook-form";
 import { Eye, EyeOff, Mail, Lock, User } from "lucide-react";
 import { useAuth, usePostQuery } from "@/hooks";
 import toast from "react-hot-toast";
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 
 const RegisterPage = () => {
   interface RegisterProps {
@@ -35,6 +35,8 @@ const RegisterPage = () => {
   const { mutate } = usePostQuery(["auth-register"]);
   const { refetch } = useAuth();
 
+  const navigate = useNavigate();
+
   const password = watch("password");
 
   const onSubmit = async (data: RegisterProps) => {
@@ -51,6 +53,7 @@ const RegisterPage = () => {
         },
         {
           onSuccess: () => {
+            navigate("/");
             refetch();
             toast.success("Register successfully");
           },
