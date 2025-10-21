@@ -11,5 +11,13 @@ export default defineConfig({
   },
   server: {
     port: 4000,
+    host: true, 
+    allowedHosts: [
+      "harmonix.uz",
+      "api.harmonix.uz",
+      "www.harmonix.uz",
+      "www.api.harmonix.uz",
+      ".harmonix.uz",
+    ],
   },
 });
