@@ -1,18 +1,15 @@
 import type { ChildrenProps } from "@/types";
 import NavbarLayout from "../Navbar";
-// import { useAuth } from "@/hooks/useAuth";
-// import { useNavigate } from "react-router";
-// import { useEffect } from "react";
+import { useAuth } from "@/hooks/useAuth";
+import { Navigate } from "react-router-dom";
 
 const MainLayout = ({ children }: ChildrenProps) => {
-  // const navigate = useNavigate();
-  // const { user } = useAuth();
+  const { user } = useAuth();
 
-  // useEffect(() => {
-  //   if (!user) {
-  //     navigate("/auth/login");
-  //   }
-  // }, [user]);
+  console.log(user)
+  if (!user) {
+    return <Navigate to="/auth/login" replace />;
+  }
 
   return (
     <div className="flex flex-col">

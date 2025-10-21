@@ -2,13 +2,16 @@ import React, { useMemo, useCallback } from "react";
 import { useAuthMe } from "./auth/me";
 import customAxios from "@/services/axios";
 import { AuthContext } from "./useAuthContext";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import Cookies from "js-cookie";
+import { User } from "@/types";
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const { data: me, isLoading: isMeLoading, refetch } = useAuthMe();
+
   const navigate = useNavigate();
 
   const login = useCallback(
@@ -19,42 +22,37 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
           password,
         });
 
-        // const accessToken = res.data?.data?.token?.accesToken;
-        // const refreshToken = res.data?.data?.token?.refreshToken;
+        await refetch();
 
-        // if (accessToken && refreshToken) {
-        //   Cookies.set("accessToken", accessToken, { expires: 1 });
-        //   Cookies.set("refreshToken", refreshToken, { expires: 7 });
-        //   await refetch();
-        //   toast.success("Login successfully");
-
-        //   return true;
-        // }
-        navigate("/");
         toast.success("Login successfully");
-        return false;
-      } catch (err) {
+        navigate("/");
+        return true;
+      } catch (err: any) {
         console.error("Login error:", err);
-        toast.error("Login error");
+        const errorMessage = err?.response?.data?.message || "Login failed";
+        toast.error(errorMessage);
         return false;
       }
     },
-    [refetch]
+    [refetch, navigate]
   );
 
   const logout = useCallback(async () => {
     try {
-      await customAxios.get("auth/logout");
-      window.location.href = "/auth/login";
-      toast.success("Successfully logged out");
+      await customAxios.get("/auth/logout");
     } catch (error) {
-      toast.error("Something went wrong");
+      console.error("Logout API error:", error);
+    } finally {
+      Cookies.remove("accessToken");
+      Cookies.remove("refreshToken");
+      toast.success("Successfully logged out");
+      window.location.href = "/auth/login";
     }
   }, []);
 
   const value = useMemo(
     () => ({
-      user: me || null,
+      user: me as User,
       login,
       logout,
       isLoading: isMeLoading,
@@ -63,5 +61,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     [me, isMeLoading, login, logout, refetch]
   );
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={value}>
+      {isMeLoading ? <div> </div> : children}
+    </AuthContext.Provider>
+  );
 };

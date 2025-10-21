@@ -6,7 +6,7 @@ export interface ChildrenProps {
 }
 
 export interface AuthContextType {
-  user: User | null;
+  user: User
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
   isLoading: boolean;
